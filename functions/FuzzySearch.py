@@ -62,6 +62,7 @@ def fuzzyNameSearch(*names):
         if data == []:
             print("\nSorry, there is no result comes back from LOC's general search.")
             print("Term with no result: ", names[0][i])
+            nameData.insert(0, [names[0][i], "null", "null", "null", "null"])
         else:
             containerCluster = DataSeperation.seperate(data)
             print("\n\nCurrent term: ", names[0][i])
@@ -115,18 +116,18 @@ def fuzzySubjectSearch(*subjects):
         if data == []:
             print("\nSorry, there is no result comes back from LOC's general search.")
             print("Term with no result: ", subjects[0][i])
+            subjectData.insert(0, [subjects[0][i], "null", "null", "null", "null"])
         else:
             containerCluster = DataSeperation.seperate(data)
             print("\n\nCurrent term: ", subjects[0][i])
             userChoice = displayOption(containerCluster)
             #load list of data into a list
-            #TODO: test userChoice = -1 
             if userChoice == -1:
                 subjectData.insert(0, [subjects[0][i], "null", "null", "null", "null"])
             else:
                 subjectData.insert(0, [subjects[0][i], containerCluster[userChoice - 1].title, containerCluster[userChoice - 1].LC_URI, containerCluster[userChoice - 1].concept, containerCluster[userChoice - 1].subdivision])
             containerCluster = []
-            i = i + 1
+        i = i + 1
     return subjectData
 
 ## Display terms to let client choose
@@ -137,7 +138,7 @@ def fuzzySubjectSearch(*subjects):
 def displayOption(cluster):
     choice = 0
 
-    print("\nPlease choose from following result， hit enter if no one is correct: \n")
+    print("\nPlease choose from following result, hit enter if no one is correct: \n")
     for term in cluster:
         print(term.num, "Title: ", term.title, "    ", "Vocabulary: ", term.vocabulary, "    ", "Concept: ", term.concept, "    ", "Subdivision: ", term.subdivision, "\n")
     print("Enter the number before each term: ", end = "")

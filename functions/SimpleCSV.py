@@ -22,7 +22,7 @@ def readCSV(csvIn):
             dataList.insert(0, True)
         print ("\nOpen input CSV success.")
     except:
-        print("Fail to open input CSV. Press enter to exit.")
+        print("Fail to open input CSV or CSV is empty. Press enter to exit.")
         key = input()
         sys.exit()
         
