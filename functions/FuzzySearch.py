@@ -39,9 +39,11 @@ def fuzzyNameSearch(*names):
     dataList = []
     containerCluster = []
     nameData = []
-
+    totalRecordNum = len(names[0])
+    mappedRecord = {}
     print("\nSearch name terms in fuzzy mode...")
-    for name in names[0]:
+    print("Total number of record: ", totalRecordNum)
+    for name in names[0][1:]:
         processedName = URI_escape(name)
         nameUrlList.append(getNameSearchUrlPrefix() + processedName + getNameSearchUrlSuffix())
     #can be optimized using multi-thread
@@ -61,17 +63,22 @@ def fuzzyNameSearch(*names):
     for data in dataList:
         if data == []:
             print("\nSorry, there is no result comes back from LOC's general search.")
-            print("Term with no result: ", names[0][i])
-            nameData.insert(0, [names[0][i], "null", "null", "null", "null"])
+            print("Term with no result: ", names[0][1:][i])
+            nameData.insert(0, [names[0][0][i], names[0][1:][i], "null", "null", "null", "null"])
+            mappedRecord[names[0][1:][i]] = -1
         else:
             containerCluster = DataSeperation.seperate(data)
-            print("\n\nCurrent term: ", names[0][i])
-            userChoice = displayOption(containerCluster)
+            print("\n\nCurrent term: ", names[0][1:][i])
+            if not (names[0][1:][i] in mappedRecord):
+                userChoice = displayOption(containerCluster)
+                mappedRecord[names[0][1:][i]] = userChoice
+            else:
+                userChoice = mappedRecord[names[0][1:][i]]
             #load list of data into a list
             if userChoice == -1:
-                nameData.insert(0, [names[0][i], "null", "null", "null", "null"])
+                nameData.insert(0, [names[0][0][i], names[0][1:][i], "null", "null", "null", "null"])
             else:
-                nameData.insert(0, [names[0][i], containerCluster[userChoice - 1].title, containerCluster[userChoice - 1].LC_URI, containerCluster[userChoice - 1].concept, containerCluster[userChoice - 1].subdivision])
+                nameData.insert(0, [names[0][0][i], names[0][1:][i], containerCluster[userChoice - 1].title, containerCluster[userChoice - 1].LC_URI, containerCluster[userChoice - 1].concept, containerCluster[userChoice - 1].subdivision])
             containerCluster = []
         i = i + 1
     return nameData
@@ -93,9 +100,12 @@ def fuzzySubjectSearch(*subjects):
     #termContainer = []
     containerCluster = []
     subjectData = []
+    totalRecordNum = len(subjects[0])
+    mappedRecord = {}
 
     print("\nSearch subject terms in fuzzy mode...")
-    for subject in subjects[0]:
+    print("Total number of record: ", totalRecordNum)
+    for subject in subjects[0][1:]:
         processedSubject = URI_escape(subject)
         subjectUrlList.append(getSubjectSearchUrlPrefix() + processedSubject + getSubjectSearchUrlSuffix())
     #can be optimized using multi-thread
@@ -115,17 +125,22 @@ def fuzzySubjectSearch(*subjects):
     for data in dataList:
         if data == []:
             print("\nSorry, there is no result comes back from LOC's general search.")
-            print("Term with no result: ", subjects[0][i])
-            subjectData.insert(0, [subjects[0][i], "null", "null", "null", "null"])
+            print("Term with no result: ", subjects[0][1:][i])
+            subjectData.insert(0, [subjects[0][0][i], subjects[0][1:][i], "null", "null", "null", "null"])
+            mappedRecord[subjects[0][1:][i]] = -1
         else:
             containerCluster = DataSeperation.seperate(data)
-            print("\n\nCurrent term: ", subjects[0][i])
-            userChoice = displayOption(containerCluster)
+            print("\n\nCurrent term: ", subjects[0][1:][i])
+            if not(subjects[0][1:][i] in mappedRecord):
+                userChoice = displayOption(containerCluster)
+                mappedRecord[subjects[0][1:][i]] = userChoice
+            else:
+                userChoice = mappedRecord[subjects[0][1:][i]]
             #load list of data into a list
             if userChoice == -1:
-                subjectData.insert(0, [subjects[0][i], "null", "null", "null", "null"])
+                subjectData.insert(0, [subjects[0][0][i], subjects[0][1:][i], "null", "null", "null", "null"])
             else:
-                subjectData.insert(0, [subjects[0][i], containerCluster[userChoice - 1].title, containerCluster[userChoice - 1].LC_URI, containerCluster[userChoice - 1].concept, containerCluster[userChoice - 1].subdivision])
+                subjectData.insert(0, [subjects[0][0][i], subjects[0][1:][i], containerCluster[userChoice - 1].title, containerCluster[userChoice - 1].LC_URI, containerCluster[userChoice - 1].concept, containerCluster[userChoice - 1].subdivision])
             containerCluster = []
         i = i + 1
     return subjectData
@@ -147,7 +162,7 @@ def displayOption(cluster):
     #invalid input protection
     if len(rawInput) == 0:
         return -1;
-    while int(rawInput) < 1 or int(rawInput) > len(cluster):
+    while int(rawInput) == 0 or int(rawInput) < -1 or int(rawInput) > len(cluster):
         print("The number you selected is invalid. Please type in number displayed.")
         print("If you want to exit the program press ctrl+c.")
         print("Enter the number before each term, hit enter if no one is correct: ", end = "")

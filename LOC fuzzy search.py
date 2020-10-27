@@ -9,7 +9,7 @@ def main():
     isSearchName = True
     keyword = []
     result = []
-    header = ["Input Term", "Title", "Vocabulary", "Concept", "Subdivision"]
+    header = ["Internal ID Link", "Input Term", "Title", "Vocabulary", "Concept", "Subdivision"]
 
     print("current directory: ", os.getcwd())
     #greeting
@@ -18,7 +18,6 @@ def main():
     inputCSV = SimpleCSV.getCSVInput()
     outputCSV = SimpleCSV.getCSVOutput()
     keyword = SimpleCSV.readCSV(inputCSV)
-    keyword.pop(0)
     isSearchName = Run.askSearchMode()
     #run process (precise->fuzzy->output), return a list contain lists of each row
     result = Run.processSerial(keyword, isSearchName)

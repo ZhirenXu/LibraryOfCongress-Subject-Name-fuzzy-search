@@ -8,24 +8,32 @@ import sys
 #           a list contain names/subject that need to be scraped
 def readCSV(csvIn):
     dataList = []
+    urlList = []
+    hasRunOnce = False
+    columnNum = 0
+    
+    #try:
+    inFile = open(csvIn, 'r', encoding = 'utf-8')
+    csvReader = csv.reader(inFile, delimiter=',')
+    for row in csvReader:
+        if not hasRunOnce:
+            print("\nwhich column you want to use as input? The column number START FROM 0.")
+            print("For example, if data is in colomn 2, type 1.")
+            print("Enter column number: ", end = "")
+            columnNum = int(input())
+            hasRunOnce = True
+        try:
+            urlList.append(row[0])
+            dataList.append(row[columnNum])
+        except:
+            print("Your may enter an invalid column Num (too big or smaller than 0). Run the script again.")
+            sys.exit()
+    #get rid of header
+    urlList.pop(0)
+    dataList.pop(0)
+    dataList.insert(0, urlList)
+    print ("\nOpen input CSV success.")
 
-    try:
-        inFile = open(csvIn, 'r')
-        csvReader = csv.reader(inFile, delimiter=',')
-        for row in csvReader:
-            dataList.append(row[0])
-        # del the header name read in first line and check which mode do we search
-        mode = dataList.pop(0)
-        if ("subject" in mode or "Subject" in mode):
-            dataList.insert(0, False)
-        else:
-            dataList.insert(0, True)
-        print ("\nOpen input CSV success.")
-    except:
-        print("Fail to open input CSV or CSV is empty. Press enter to exit.")
-        key = input()
-        sys.exit()
-        
     return dataList
 
 ##write category and data into csv file
