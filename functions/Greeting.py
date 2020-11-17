@@ -3,9 +3,9 @@ import sys
 ## print program info
 def showInfo():
     print("************************************************************")
-    print("*   LibraryOfCongress Subject/Name Fuzzy Scrapper v1.0.0   *")
+    print("*   LibraryOfCongress Subject/Name Fuzzy Scrapper v1.1.0   *")
     print("*                  Author: Zhiren Xu                       *")
-    print("*               published data: 10/22/20                   *")
+    print("*               published data: 10/27/20                   *")
     print("************************************************************")
     print("Check this repo to see Ruth's work: https://github.com/ruthtillman/subjectreconscripts")
     
